@@ -45,7 +45,7 @@ class CampaignController extends Controller {
 									->where('id', $id)
 									->first();
 		if ($campaign) {
-			return $this->campaigns->getMetrics1($id, $request->all());
+			return $this->campaigns->getMetrics1($request->user_id, $id, $request->all());
 		} else {
 			return response()->json(['message' => __('Campaing not found.'), 404]);
 		}
