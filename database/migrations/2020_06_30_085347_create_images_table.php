@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDateToMetric extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddDateToMetric extends Migration
      */
     public function up()
     {
-        Schema::table('metrics', function (Blueprint $table) {
-            $table->timestamp('date')->useCurrent();
+        Schema::create('images', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('path');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddDateToMetric extends Migration
      */
     public function down()
     {
-        Schema::table('metrics', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('images');
     }
 }

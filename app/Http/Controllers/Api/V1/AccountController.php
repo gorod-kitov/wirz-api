@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\User;
 
 class AccountController extends Controller {
@@ -11,7 +11,7 @@ class AccountController extends Controller {
 
 	public function __construct(User $USER)
 	{
-		$this->userModel = $USER; 
+		$this->userModel = $USER;
 	}
 
 	public function getAccountData(Request $request)

@@ -32,10 +32,13 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 
 });
+
+Route::post('add_creatives', 'Api\CreativeController@addCreatives');
+Route::get('creatives', 'Api\CreativeController@index');
+Route::delete('creatives/{id}/delete', 'Api\CreativeController@delete');
