@@ -185,17 +185,17 @@ class Campaign extends Model
 		];
 		foreach($fields_arr as $field) {
 			$access = MetricAccess::where('metric_name', $field)->where('user_id', 2)->first();
-			$response["{$field}_is_active"] = $access->is_active;
+			$response["{$field}"]['active'] = $access->is_active;
 			if ($access->is_active || $user_id !== 2) {
-				$response[$field] = 0;
+				$response[$field]['value'] = 0;
 				$metrics = Metric::where('campaign_id', $campaign_id)
 								->where('name', $field)
 								->whereBetween('date', [$from, $to])->get();
 				foreach ($metrics as $m) {
-					$response[$field] += floatval($m->value);
+                    $response[$field]['value'] += floatval($m->value);
 				}
 			} else {
-				$response[$field] = -1;
+                $response[$field]['value'] = -1;
 			}
 		}
 
