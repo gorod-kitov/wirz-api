@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Metric;
 use App\User;
@@ -11,16 +11,20 @@ class CampaignController extends Controller {
 
 	private $metrics, $campaigns, $users;
 
+	const ADD_ENGAGEMENT = 0;
+	const SITE_ENGAGEMENT = 1;
+
 	public function __construct(Metric $METRIC, Campaign $CAMPAIGN, User $USER)
 	{
-		$this->metrics = $METRIC; 
+		$this->metrics = $METRIC;
 		$this->campaigns = $CAMPAIGN;
 		$this->users = $USER;
 	}
 
 	public function addMetrics1(Request $request)
 	{
-		$campaign = $this->campaigns->where('user_id', $request->user_id)
+
+		$campaign = $this->campaigns->where('user_id', auth()->user()->id)
 									->where('name', $request->get('campaign'))
 									->first();
 		if ($campaign) {
@@ -37,11 +41,14 @@ class CampaignController extends Controller {
 
 	public function getMetrics1($id, Request $request)
 	{
+//	    return response()->json($request->all());
 		$request->validate([
 			'date_from' => 'required|string',
 			'date_to' => 'required|string',
 		]);
-		$campaign = $this->campaigns->where('user_id', $request->user_id)
+	    return response()->json(auth()->user());
+
+		$campaign = $this->campaigns->where('user_id', auth()->user()->id)
 									->where('id', $id)
 									->first();
 		if ($campaign) {

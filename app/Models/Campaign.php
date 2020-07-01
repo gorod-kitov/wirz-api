@@ -15,6 +15,7 @@ class Campaign extends Model
 		$metric->value = $data['clicks'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+		$metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'clicks')->where('user_id', 2)->first();
@@ -26,7 +27,7 @@ class Campaign extends Model
 			$metric_access->metric_name = 'clicks';
 			$metric_access->user_id = 2;
 			$metric_access->is_active = $data['clicksIsActive'];
-			$metric_access->save(); 
+			$metric_access->save();
 		}
 
 		$metric = new Metric();
@@ -34,6 +35,7 @@ class Campaign extends Model
 		$metric->value = $data['totalReach'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'total_reach')->where('user_id', 2)->first();
@@ -53,6 +55,7 @@ class Campaign extends Model
 		$metric->value = $data['adEngagement'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'ad_engagement')->where('user_id', 2)->first();
@@ -72,6 +75,7 @@ class Campaign extends Model
 		$metric->value = $data['pageEngagement'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'page_engagement')->where('user_id', 2)->first();
@@ -91,6 +95,7 @@ class Campaign extends Model
 		$metric->value = $data['activeLength'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'active_length')->where('user_id', 2)->first();
@@ -110,6 +115,7 @@ class Campaign extends Model
 		$metric->value = $data['clickouts'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'clickouts')->where('user_id', 2)->first();
@@ -129,6 +135,7 @@ class Campaign extends Model
 		$metric->value = $data['sales'];
 		$metric->campaign_id = $id;
 		$metric->date = $data['date'];
+        $metric->engagement = $data['engagement'];
 		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'sales')->where('user_id', 2)->first();
@@ -136,7 +143,7 @@ class Campaign extends Model
 			$metric_access->is_active = $data['salesIsActive'];
 			$metric_access->save();
 		} else {
-			$metric_access = new MetricAccess();   
+			$metric_access = new MetricAccess();
 			$metric_access->metric_name = 'sales';
 			$metric_access->user_id = 2;
 			$metric_access->is_active = $data['salesIsActive'];
@@ -147,7 +154,7 @@ class Campaign extends Model
 	}
 
 	public function addMetrics2($data)
-	{   
+	{
 		foreach ($data['campaigns'] as $data_item) {
 			$campaign = $this->where('name', $data_item['name'])->first();
 			if ($campaign) {
@@ -155,8 +162,8 @@ class Campaign extends Model
 				foreach ($campaign_fields as $field) {
 					$metric = new Metric();
 					$metric->name = $field;
-					$metric->value = $data_item[$field];	
-					$metric->date = $data['date'];	
+					$metric->value = $data_item[$field];
+					$metric->date = $data['date'];
 					$metric->is_active = 1;
 					$metric->campaign_id = $campaign->id;
 					$metric->save();
@@ -168,16 +175,14 @@ class Campaign extends Model
 
 	public function getMetrics1($user_id, $campaign_id, $data)
 	{
-		$from = $data['date_from']; 
+		$from = $data['date_from'];
 		$to = $data['date_to'];
-		
+
 		$fields_arr = [
-			'clicks', 'total_reach', 
+			'clicks', 'total_reach',
 			'ad_engagement', 'page_engagement',
 			'active_length', 'clickouts', 'sales'
 		];
-
-		$response;
 		foreach($fields_arr as $field) {
 			$access = MetricAccess::where('metric_name', $field)->where('user_id', 2)->first();
 			$response["{$field}_is_active"] = $access->is_active;
@@ -189,8 +194,8 @@ class Campaign extends Model
 				foreach ($metrics as $m) {
 					$response[$field] += floatval($m->value);
 				}
-			} else { 
-				$response[$field] = -1; 
+			} else {
+				$response[$field] = -1;
 			}
 		}
 
@@ -199,9 +204,9 @@ class Campaign extends Model
 
 	public function getMetrics2($id, $data)
 	{
-		$from = $data['date_from']; 
+		$from = $data['date_from'];
 		$to = $data['date_to'];
-		
+
 		$fields_arr = ['display', 'native', 'search', 'social'];
 
 		$response = [];
@@ -212,7 +217,7 @@ class Campaign extends Model
 							->whereBetween('date', [$from, $to])->get();
 			foreach ($metrics as $m) {
 				$response[] = $m;
-			} 
+			}
 		}
 
 		return $response;

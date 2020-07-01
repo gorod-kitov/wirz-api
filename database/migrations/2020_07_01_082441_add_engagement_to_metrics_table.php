@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDateToMetric extends Migration
+class AddEngagementToMetricsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddDateToMetric extends Migration
     public function up()
     {
         Schema::table('metrics', function (Blueprint $table) {
-            $table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->boolean('engagement')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddDateToMetric extends Migration
     public function down()
     {
         Schema::table('metrics', function (Blueprint $table) {
-            //
+            $table->dropColumn('engagement');
         });
     }
 }
