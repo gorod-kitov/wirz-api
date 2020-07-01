@@ -46,7 +46,6 @@ class CampaignController extends Controller {
 			'date_from' => 'required|string',
 			'date_to' => 'required|string',
 		]);
-	    return response()->json(auth()->user());
 
 		$campaign = $this->campaigns->where('user_id', auth()->user()->id)
 									->where('id', $id)

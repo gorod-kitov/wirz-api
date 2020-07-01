@@ -32,7 +32,12 @@ class AuthController extends Controller
             return $this->respondWithToken($token);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json([
+            'errors' => [
+                'email' => ['Invalid username or password'],
+                'password' => [' ']
+            ]
+        ],401);
     }
 
     /**
@@ -78,7 +83,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'api_token' => $token,
-			'user' => $this->guard('api')->user(),
+            'user' => $this->guard('api')->user()->load('role'),
             'token_type' => 'bearer',
             'expires_in' => $this->guard('api')->factory()->getTTL() * 60
         ]);

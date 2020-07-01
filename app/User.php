@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Campaign;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -35,24 +34,29 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-	];
+    ];
 
 
-	public function campaigns()
-	{
-		return $this->hasMany(Campaign::class);
-	}
+    public function campaigns()
+    {
+        return $this->hasMany(Campaign::class);
+    }
 
 
-	public function getAccountData($user_id)
-	{
-		return $this->where('id', $user_id)
-					->select('id', 'name', 'email')
-					->with(['campaigns' => function($c) {
-						$c->select('id', 'name', 'user_id');
-					}])
-					->first();
-	}
+    public function role()
+    {
+        return $this->belongsTo('App\Models\Role');
+    }
+
+    public function getAccountData($user_id)
+    {
+        return $this->where('id', $user_id)
+            ->select('id', 'name', 'email')
+            ->with(['campaigns' => function ($c) {
+                $c->select('id', 'name', 'user_id');
+            }])
+            ->first();
+    }
 
 
 
