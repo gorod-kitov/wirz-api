@@ -177,6 +177,7 @@ class Campaign extends Model
 	{
 		$from = $data['date_from'];
 		$to = $data['date_to'];
+        $engagement = $data['selected'];
 
 		$fields_arr = [
 			'clicks', 'total_reach',
@@ -190,6 +191,7 @@ class Campaign extends Model
 				$response[$field]['value'] = 0;
 				$metrics = Metric::where('campaign_id', $campaign_id)
 								->where('name', $field)
+                                ->where('engagement', $engagement)
 								->whereBetween('date', [$from, $to])->get();
 				foreach ($metrics as $m) {
                     $response[$field]['value'] += floatval($m->value);
