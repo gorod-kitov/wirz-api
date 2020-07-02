@@ -52,6 +52,16 @@ class AdminController extends Controller
     }
 
 
+    public function storeCompany(Request $request)
+    {
+        $company = Campaign::find($request->company_id);
+        $company->name = $request->campaign_name;
+        $company->user_id = $request->selected_user;
+        $company->save();
+
+        return response()->json('ok', Response::HTTP_OK);
+    }
+
     public function getUsers(Request $request)
     {
         $users = User::with('campaigns');
