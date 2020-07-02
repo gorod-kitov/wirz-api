@@ -34,9 +34,22 @@ class CampaignController extends Controller {
 
     public function filterMetrics2(Request $request)
     {
-        return response()->json($request->all());
+        $companies = Campaign::query()->select('id','name','is_active')
+            ->with(['metrics2' => function ($query) use($request) {
+                $query->where('date', $request->date)
+                    ->select('name','value','campaign_id');
+        }])->get();
+   /*     $companies = Campaign::query()
+            ->join('metrics', function($join) use ($request) {
+                $join->on('metrics.campaign_id', '=', 'campaigns.id')
+                    ->where('metrics.date', $request->date)
+                    ->whereNull('metrics.engagement');
+            })
+//            ->groupBy('name')
+            ->select('metrics.name as metric','metrics.date', 'metrics.value' , 'campaigns.name', 'campaigns.is_active' )
+            ->get();*/
 
-        return response()->json($metrics->toArray());
+        return response()->json($companies->toArray());
     }
 
 

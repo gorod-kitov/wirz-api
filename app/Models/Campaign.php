@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Models;
-
-
 use App\Models\Metric;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MetricAccess;
@@ -10,6 +8,12 @@ use App\Models\MetricAccess;
 class Campaign extends Model
 {
     protected $guarded = [];
+
+
+    public function metrics2() {
+        return $this->hasMany(Metric::class)
+            ->whereNull('metrics.engagement');
+    }
 
 	public function addMetrics1($id, $data)
 	{
