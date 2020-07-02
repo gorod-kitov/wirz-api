@@ -57,6 +57,7 @@ class AdminController extends Controller
         $company = Campaign::find($request->company_id);
         $company->name = $request->campaign_name;
         $company->user_id = $request->selected_user;
+        $company->description = $request->description;
         $company->save();
 
         return response()->json('ok', Response::HTTP_OK);

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIsActiveToCampaignsTable extends Migration
+class CampaignsAddDescriptionColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddIsActiveToCampaignsTable extends Migration
     public function up()
     {
         Schema::table('campaigns', function (Blueprint $table) {
-          $table->boolean('is_active')->default(1)->after('user_id');
+            $table->string('description')->nullable()->after('is_active');
         });
     }
 
@@ -26,7 +26,7 @@ class AddIsActiveToCampaignsTable extends Migration
     public function down()
     {
         Schema::table('campaigns', function (Blueprint $table) {
-           $table->dropColumn('is_active');
+            $table->dropColumn('description');
         });
     }
 }
