@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campaign;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -49,11 +50,16 @@ class AdminController extends Controller
     }
 
 
-    public function getUsers()
+    public function getUsers(Request $request)
     {
-        $users = User::with('campaigns')->get();
 
-        return $users->toArray();
+        $users = User::with('campaigns');
+
+        if ($request->select) {
+            $users = $users->where('role_id', 2);
+        }
+
+        return $users->get()->toArray();
     }
 
     public function getUser($id)
@@ -65,4 +71,25 @@ class AdminController extends Controller
         return response()->json($user, Response::HTTP_OK);
 
     }
+
+    public function getCompanies()
+    {
+        $companies = null;
+
+        if (auth()->user()->role_id == 1) {
+            $companies = Campaign::with('user')->get();
+        } else {
+            $companies = Campaign::where('user_id', auth()->user()->id)
+                ->with('user')
+                ->get();
+        }
+
+        return response()->json($companies->toArray(), Response::HTTP_OK);
+    }
+
+    public function getCompany($id)
+    {
+        return Campaign::find($id)->toArray();
+    }
+
 }
