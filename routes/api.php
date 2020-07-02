@@ -49,3 +49,4 @@ Route::delete('creatives/{id}/delete', 'Api\CreativeController@delete');
 
 Route::post('user/create', 'Api\V1\AdminController@store');
 Route::get('get/users', 'Api\V1\AdminController@getUsers');
+Route::get('get/user/{id}', 'Api\V1\AdminController@getUser');

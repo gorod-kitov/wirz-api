@@ -12,7 +12,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-
         $logo = null;
 
         if ($request->file('logo')) {
@@ -40,5 +39,15 @@ class AdminController extends Controller
         $users = User::with('campaigns')->get();
 
         return $users->toArray();
+    }
+
+    public function getUser($id)
+    {
+        $user = User::where('id', $id)
+            ->select('name', 'email')
+            ->get()->toArray();
+
+        return response()->json($user, Response::HTTP_OK);
+
     }
 }
