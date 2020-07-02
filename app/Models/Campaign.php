@@ -1,17 +1,22 @@
 <?php
 
 namespace App\Models;
-
-
-use App\User;
+use App\Models\Metric;
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Campaign extends Model
 {
     protected $guarded = [];
 
-    public function addMetrics1($id, $data)
-    {
+
+    public function metrics2() {
+        return $this->hasMany(Metric::class)
+            ->whereNull('metrics.engagement');
+    }
+
+	public function addMetrics1($id, $data)
+	{
 
         $metric = Metric::query()->updateOrCreate(['name' => 'clicks', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
             ['value' => $data['clicks']]);
