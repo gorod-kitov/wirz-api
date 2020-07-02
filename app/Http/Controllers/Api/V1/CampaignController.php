@@ -21,12 +21,24 @@ class CampaignController extends Controller {
 		$this->users = $USER;
 	}
 
+	public function filterMetrics1(Request $request)
+    {
+        $metrics = Metric::query()->select('name','value', 'metric_accesses.is_active')->where('campaign_id', $request->campaign )
+            ->where('date', $request->date)
+            ->where('engagement', $request->selected)
+            ->join('metric_accesses','metrics.name', 'metric_accesses.metric_name')
+            ->get();
+
+        return response()->json($metrics->toArray());
+    }
+
 	public function addMetrics1(Request $request)
 	{
 
-		$campaign = $this->campaigns->where('user_id', auth()->user()->id)
-									->where('name', $request->get('campaign'))
-									->first();
+		$campaign = $this->campaigns
+            ->where('name', $request->get('campaign'))
+            ->first();
+
 		if ($campaign) {
 			return $this->campaigns->addMetrics1($campaign->id, $request->all());
 		} else {
@@ -46,10 +58,11 @@ class CampaignController extends Controller {
 			'date_from' => 'required|string',
 			'date_to' => 'required|string',
 		]);
+//		return response()->json($id);
+		$campaign = $this->campaigns
+            ->where('id', $id)
+            ->first();
 
-		$campaign = $this->campaigns->where('user_id', auth()->user()->id)
-									->where('id', $id)
-									->first();
 		if ($campaign) {
 			return $this->campaigns->getMetrics1($request->user_id, $id, $request->all());
 		} else {

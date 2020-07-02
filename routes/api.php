@@ -17,7 +17,10 @@ use Illuminate\Http\Request;
 //Route::post('/login', 'AuthController@authenticate');
 //Route::post('/signup', 'AuthController@signup');
 Route::post('/campaign/metrics1', 'Api\V1\CampaignController@addMetrics1');
+Route::get('campaign/filter/metrics1', 'Api\V1\CampaignController@filterMetrics1');
+
 Route::get('/campaign/{id}/metrics1', 'Api\V1\CampaignController@getMetrics1');
+
 Route::middleware(['auth.token'])->group(function() {
 	Route::get('/account', 'Api\V1\AccountController@getAccountData');
 
