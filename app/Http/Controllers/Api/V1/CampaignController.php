@@ -32,6 +32,14 @@ class CampaignController extends Controller {
         return response()->json($metrics->toArray());
     }
 
+    public function filterMetrics2(Request $request)
+    {
+        return response()->json($request->all());
+
+        return response()->json($metrics->toArray());
+    }
+
+
 	public function addMetrics1(Request $request)
 	{
 
@@ -48,6 +56,7 @@ class CampaignController extends Controller {
 
 	public function addMetrics2(Request $request)
 	{
+//	    return  response()->json($request->all());
 		return $this->campaigns->addMetrics2($request->all());
 	}
 

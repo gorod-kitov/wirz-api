@@ -18,13 +18,13 @@ use Illuminate\Http\Request;
 //Route::post('/signup', 'AuthController@signup');
 Route::post('/campaign/metrics1', 'Api\V1\CampaignController@addMetrics1');
 Route::get('campaign/filter/metrics1', 'Api\V1\CampaignController@filterMetrics1');
+Route::get('campaign/filter/metrics2', 'Api\V1\CampaignController@filterMetrics2');
+Route::post('/campaign/metrics2', 'Api\V1\CampaignController@addMetrics2');
 
 Route::get('/campaign/{id}/metrics1', 'Api\V1\CampaignController@getMetrics1');
 
 Route::middleware(['auth.token'])->group(function() {
 	Route::get('/account', 'Api\V1\AccountController@getAccountData');
-
-	Route::post('/campaign/metrics2', 'Api\V1\CampaignController@addMetrics2');
 
 	Route::get('/campaign/{id}/metrics2', 'Api\V1\CampaignController@getMetrics2');
 });

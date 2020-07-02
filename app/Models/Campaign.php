@@ -9,6 +9,8 @@ use App\Models\MetricAccess;
 
 class Campaign extends Model
 {
+    protected $guarded = [];
+
 	public function addMetrics1($id, $data)
 	{
 
@@ -126,15 +128,18 @@ class Campaign extends Model
 		foreach ($data['campaigns'] as $data_item) {
 			$campaign = $this->where('name', $data_item['name'])->first();
 			if ($campaign) {
+			    $campaign->update(['is_active' => $data_item['isActive']]);
 				$campaign_fields = ['display', 'native', 'search', 'social'];
 				foreach ($campaign_fields as $field) {
-					$metric = new Metric();
+                    $metric = Metric::query()->updateOrCreate(['name' => $field, 'date' => $data['date'], 'campaign_id' => $campaign->id],
+                        ['value' => $data_item[$field] ]);
+
+           /*         $metric = new Metric();
 					$metric->name = $field;
 					$metric->value = $data_item[$field];
 					$metric->date = $data['date'];
-					$metric->is_active = 1;
 					$metric->campaign_id = $campaign->id;
-					$metric->save();
+					$metric->save();*/
 				}
 			}
 		}
