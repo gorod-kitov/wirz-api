@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class DeleteRolesColumnFromUsersTable extends Migration
+class UsersTableDeleteApiTokenColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class DeleteRolesColumnFromUsersTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('users', 'role')) {
+        if (Schema::hasColumn('users', 'api_token')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->dropColumn('role');
+                $table->dropColumn('api_token');
             });
         }
     }
@@ -27,6 +27,6 @@ class DeleteRolesColumnFromUsersTable extends Migration
      */
     public function down()
     {
-
+        //
     }
 }

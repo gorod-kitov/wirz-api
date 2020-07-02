@@ -43,3 +43,6 @@ Route::group([
 Route::post('add_creatives', 'Api\CreativeController@addCreatives');
 Route::get('creatives', 'Api\CreativeController@index');
 Route::delete('creatives/{id}/delete', 'Api\CreativeController@delete');
+
+Route::post('user/create', 'Api\V1\AdminController@store');
+Route::get('get/users', 'Api\V1\AdminController@getUsers');
