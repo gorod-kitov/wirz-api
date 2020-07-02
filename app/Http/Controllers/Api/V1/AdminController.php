@@ -22,13 +22,28 @@ class AdminController extends Controller
 
         }
 
-        User::create([
+        // password and logo may not be not provided during edit
+        $ifFilled = [];
+        if ($request->password) {
+            $ifFilled['password'] = bcrypt($request->password);
+        }
+
+        if ($request->logo) {
+            $ifFilled['logo'] = $logo;
+        }
+        $create = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'logo' => $logo,
             'role_id' => 2,
-        ]);
+        ];
+
+        $data = array_merge($create, $ifFilled);
+
+        if (!$request->update) {
+            User::create($data);
+        } else {
+            User::where('id', $request->id)->update($data);
+        }
 
         return response()->json('ok', Response::HTTP_OK);
     }
