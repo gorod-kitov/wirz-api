@@ -98,9 +98,11 @@ class CampaignController extends Controller {
 			'date_from' => 'required|string',
 			'date_to' => 'required|string',
 		]);
-		$campaign = $this->campaigns->where('user_id', $request->user_id)
-									->where('id', $id)
-									->first();
+
+		$campaign = $this->campaigns
+            ->where('id', $id)
+            ->first();
+
 		if ($campaign) {
 			return $this->campaigns->getMetrics2($id, $request->all());
 		} else {
