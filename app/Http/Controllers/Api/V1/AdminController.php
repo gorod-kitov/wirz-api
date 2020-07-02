@@ -32,10 +32,12 @@ class AdminController extends Controller
         if ($request->logo) {
             $ifFilled['logo'] = $logo;
         }
+
+
         $create = [
             'name' => $request->name,
             'email' => $request->email,
-            'role_id' => 2,
+            'role_id' => $request->is_admin == 'true' ? 1 : 2,
         ];
 
         $data = array_merge($create, $ifFilled);
@@ -52,7 +54,6 @@ class AdminController extends Controller
 
     public function getUsers(Request $request)
     {
-
         $users = User::with('campaigns');
 
         if ($request->select) {
@@ -65,7 +66,7 @@ class AdminController extends Controller
     public function getUser($id)
     {
         $user = User::where('id', $id)
-            ->select('name', 'email')
+            ->select('name', 'email', 'role_id')
             ->get()->toArray();
 
         return response()->json($user, Response::HTTP_OK);
