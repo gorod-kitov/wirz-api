@@ -46,6 +46,7 @@ Route::get('creatives', 'Api\CreativeController@index');
 Route::delete('creatives/{id}/delete', 'Api\CreativeController@delete');
 
 Route::post('user/create', 'Api\V1\AdminController@store');
+Route::post('company/save', 'Api\V1\AdminController@storeCompany');
 Route::get('get/users/{select?}', 'Api\V1\AdminController@getUsers');
 Route::get('get/companies', 'Api\V1\AdminController@getCompanies');
 Route::get('get/user/{id}', 'Api\V1\AdminController@getUser');
