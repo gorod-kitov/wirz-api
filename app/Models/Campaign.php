@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+
 use App\Models\Metric;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\MetricAccess;
 
 class Campaign extends Model
 {
 	public function addMetrics1($id, $data)
 	{
-		$metric = new Metric();
-		$metric->name = 'clicks';
-		$metric->value = $data['clicks'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-		$metric->engagement = $data['engagement'];
-		$metric->save();
+
+		$metric = Metric::query()->updateOrCreate(['name' => 'clicks', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+        ['value' => $data['clicks']]);
 
 		$metric_access = MetricAccess::where('metric_name', 'clicks')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -30,13 +27,8 @@ class Campaign extends Model
 			$metric_access->save();
 		}
 
-		$metric = new Metric();
-		$metric->name = 'total_reach';
-		$metric->value = $data['totalReach'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
+        $metric = Metric::query()->updateOrCreate(['name' => 'total_reach', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['totalReach']]);
 
 		$metric_access = MetricAccess::where('metric_name', 'total_reach')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -50,13 +42,8 @@ class Campaign extends Model
 			$metric_access->save();
 		}
 
-		$metric = new Metric();
-		$metric->name = 'ad_engagement';
-		$metric->value = $data['adEngagement'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
+        $metric = Metric::query()->updateOrCreate(['name' => 'ad_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['adEngagement']]);
 
 		$metric_access = MetricAccess::where('metric_name', 'ad_engagement')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -70,13 +57,8 @@ class Campaign extends Model
 			$metric_access->save();
 		}
 
-		$metric = new Metric();
-		$metric->name = 'page_engagement';
-		$metric->value = $data['pageEngagement'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
+        $metric = Metric::query()->updateOrCreate(['name' => 'page_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['pageEngagement']]);
 
 		$metric_access = MetricAccess::where('metric_name', 'page_engagement')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -90,13 +72,9 @@ class Campaign extends Model
 			$metric_access->save();
 		}
 
-		$metric = new Metric();
-		$metric->name = 'active_length';
-		$metric->value = $data['activeLength'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
+        $metric = Metric::query()->updateOrCreate(['name' => 'active_length', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['activeLength']]);
+
 
 		$metric_access = MetricAccess::where('metric_name', 'active_length')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -110,13 +88,8 @@ class Campaign extends Model
 			$metric_access->save();
 		}
 
-		$metric = new Metric();
-		$metric->name = 'clickouts';
-		$metric->value = $data['clickouts'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
+        $metric = Metric::query()->updateOrCreate(['name' => 'clickouts', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['clickouts']]);
 
 		$metric_access = MetricAccess::where('metric_name', 'clickouts')->where('user_id', 2)->first();
 		if ($metric_access) {
@@ -129,14 +102,9 @@ class Campaign extends Model
 			$metric_access->is_active = $data['clickoutsIsActive'];
 			$metric_access->save();
 		}
+        $metric = Metric::query()->updateOrCreate(['name' => 'sales', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' =>  $data['engagement']],
+            ['value' => $data['sales']]);
 
-		$metric = new Metric();
-		$metric->name = 'sales';
-		$metric->value = $data['sales'];
-		$metric->campaign_id = $id;
-		$metric->date = $data['date'];
-        $metric->engagement = $data['engagement'];
-		$metric->save();
 
 		$metric_access = MetricAccess::where('metric_name', 'sales')->where('user_id', 2)->first();
 		if ($metric_access) {
