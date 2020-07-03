@@ -192,8 +192,11 @@ class Campaign extends Model
 
         foreach ($fields_arr as $field) {
             $metrics = Metric::where('campaign_id', $id)
-                ->where('name', $field)
-                ->whereBetween('date', [$from, $to])->get();
+                ->where('metrics.name', $field)
+                ->whereBetween('date', [$from, $to])
+                ->join('campaigns', 'metrics.campaign_id', 'campaigns.id')
+                ->select('metrics.*', 'campaigns.is_active')
+                ->get();
             foreach ($metrics as $m) {
                 $response[] = $m;
             }
