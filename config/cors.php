@@ -33,6 +33,8 @@ return [
      */
     'allowed_origins' => ['*'],
 
+    'access_control_allow_origin' => ['*'],
+
     /*
      * Patterns that can be used with `preg_match` to match the origin.
      */
