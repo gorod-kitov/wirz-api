@@ -48,7 +48,7 @@ class AdminController extends Controller
             User::where('id', $request->id)->update($data);
         }
 
-        return response()->json('ok', Response::HTTP_OK);
+        return response()->json(['status' => 'ok', 'logo' => config('app.url').'/images/logo/'.$logo], Response::HTTP_OK);
     }
 
 

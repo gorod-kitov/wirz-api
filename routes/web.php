@@ -17,4 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');;
+Route::get('/import-data', 'HomeController@importData');
+Route::post('/import-data', 'HomeController@importDataStore')->name('import.data');
+Route::get('/import-data-force', 'HomeController@importDataForce');
