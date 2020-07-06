@@ -25,7 +25,7 @@ class CampaignController extends Controller {
 
 	public function filterMetrics1(Request $request)
     {
-        $this->check();
+        //$this->check();
 
         $metrics = Metric::query()->select('name','value', 'metric_accesses.is_active')->where('campaign_id', $request->campaign )
             ->where('date', $request->date)
