@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Group;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\User;
@@ -83,6 +84,23 @@ class AdminController extends Controller
         return response()->json($user, Response::HTTP_OK);
 
     }
+
+    public function getGroups(Request $request)
+    {
+        $group = Group::get();
+        return \response()->json($group);
+    }
+
+    public function getGroup($id)
+    {
+        $user = Group::where('id', $id)
+            ->select('id', 'name' )
+            ->first()->toArray();
+
+        return response()->json($user, Response::HTTP_OK);
+    }
+
+
 
     public function getCompanies()
     {

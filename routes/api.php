@@ -51,3 +51,7 @@ Route::get('get/users/{select?}', 'Api\V1\AdminController@getUsers');
 Route::get('get/companies', 'Api\V1\AdminController@getCompanies');
 Route::get('get/user/{id}', 'Api\V1\AdminController@getUser');
 Route::get('get/company/{id}', 'Api\V1\AdminController@getCompany');
+
+Route::get('get/groups/', 'Api\V1\AdminController@getGroups');
+Route::get('get/group/{id}', 'Api\V1\AdminController@getGroup');
+Route::post('group/create', 'Api\V1\AdminController@storeGroup');
