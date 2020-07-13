@@ -83,7 +83,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'api_token' => $token,
-            'user' => $this->guard('api')->user()->load('role'),
+            'user' => $this->guard('api')->user()->load('role','group:name,logo,id'),
             'token_type' => 'bearer',
             'expires_in' => $this->guard('api')->factory()->getTTL() * 60
         ]);

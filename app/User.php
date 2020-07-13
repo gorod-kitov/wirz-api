@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'logo', 'role_id', 'password'
+        'name', 'email', 'logo', 'role_id', 'password','group_id'
     ];
 
     /**
@@ -82,13 +82,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected $appends = [
-        'image'
-    ];
-
-    public function getImageAttribute()
+    public function group()
     {
-        return $this->logo ? asset('images/logo/' . $this->logo) : null;
+        return $this->belongsTo(Group::class);
     }
-
 }

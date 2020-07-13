@@ -14,15 +14,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $logo = null;
-
-        if ($request->file('logo')) {
-
-            $logo = time() . uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
-
-            $request->file('logo')->move(public_path('images/logo'), $logo);
-
-        }
 
         // password and logo may not be not provided during edit
         $ifFilled = [];
@@ -30,26 +21,23 @@ class AdminController extends Controller
             $ifFilled['password'] = bcrypt($request->password);
         }
 
-        if ($request->logo) {
-            $ifFilled['logo'] = $logo;
-        }
-
-
         $create = [
             'name' => $request->name,
             'email' => $request->email,
             'role_id' => $request->is_admin == 'true' ? 1 : 2,
+            'group_id' => $request->group_id
         ];
 
         $data = array_merge($create, $ifFilled);
 
         if (!$request->update) {
-            User::create($data);
+          $user =  User::create($data);
         } else {
-            User::where('id', $request->id)->update($data);
+          $user =  User::where('id', $request->id)->first();
+          $user->update($data);
         }
 
-        return response()->json(['status' => 'ok', 'logo' => config('app.url').'/images/logo/'.$logo], Response::HTTP_OK);
+        return response()->json(['status' => 'ok', 'user' => $user->load('group','role')], Response::HTTP_OK);
     }
 
 
@@ -78,7 +66,7 @@ class AdminController extends Controller
     public function getUser($id)
     {
         $user = User::where('id', $id)
-            ->select('name', 'email', 'role_id')
+            ->select('name', 'email', 'role_id','group_id')
             ->get()->toArray();
 
         return response()->json($user, Response::HTTP_OK);
@@ -100,7 +88,49 @@ class AdminController extends Controller
         return response()->json($user, Response::HTTP_OK);
     }
 
+    public function storeGroup (Request $request)
+    {
 
+        $logo = null;
+
+        if ($request->file('logo')) {
+
+            $logo = time() . uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
+
+            $request->file('logo')->move(public_path('images/logo'), $logo);
+
+        }
+
+        $create = [
+            'name' => $request->name,
+            'logo' => $logo,
+        ];
+
+        $group = Group::query()
+            ->create($create);
+
+        return \response()->json($group);
+
+    }
+
+    public function editGroup ($id, Request $request)
+    {
+        $logo = null;
+        $update = [
+            'name' => $request->name,
+        ];
+
+        if ($request->file('logo')) {
+            $logo = time() . uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
+            $request->file('logo')->move(public_path('images/logo'), $logo);
+            $update['logo'] = $logo;
+        }
+        $group = Group::query()->findOrFail($id);
+        $group->update($update);
+
+        return \response()->json($group,Response::HTTP_OK);
+
+    }
 
     public function getCompanies()
     {
