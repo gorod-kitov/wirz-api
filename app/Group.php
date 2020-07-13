@@ -17,4 +17,8 @@ class Group extends Model
         return $this->logo ? asset('images/logo/' . $this->logo) : null;
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

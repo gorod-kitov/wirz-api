@@ -137,17 +137,20 @@ class AdminController extends Controller
         $companies = null;
 
         if (auth()->user()->role_id == 1) {
-            $companies = Campaign::with('user')->get();
+            $companies = Group::with('users.campaigns')->get();
         } else {
-            $companies = Campaign::where('user_id', auth()->user()->id)
-                ->with('user')
-                ->get();
+            $companies = Group::whereHas('users', function ($user) {
+                $user->where('role_id',1);
+            })->with(['users' => function($user) {
+                $user->with('campaigns');
+            }])->get()
+          ;
         }
 
         return response()->json($companies->toArray(), Response::HTTP_OK);
     }
 
-    public function getCompany($id)
+    public function oompany($id)
     {
         return Campaign::find($id)->toArray();
     }
