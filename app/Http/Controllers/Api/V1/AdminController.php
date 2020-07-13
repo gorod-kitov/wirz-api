@@ -150,7 +150,7 @@ class AdminController extends Controller
         return response()->json($companies->toArray(), Response::HTTP_OK);
     }
 
-    public function oompany($id)
+    public function getCompany($id)
     {
         return Campaign::find($id)->toArray();
     }
