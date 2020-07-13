@@ -18,6 +18,21 @@ class Campaign extends Model
 	public function addMetrics1($id, $data)
 	{
 
+        $metric = Metric::query()->updateOrCreate(['name' => 'adImpressions', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+            ['value' => $data['adImpressions']]);
+
+        $metric_access = MetricAccess::where('metric_name', 'adImpressions')->where('user_id', 2)->first();
+        if ($metric_access) {
+            $metric_access->is_active = $data['adImpressionsIsActive'];
+            $metric_access->save();
+        } else {
+            $metric_access = new MetricAccess();
+            $metric_access->metric_name = 'adImpressions';
+            $metric_access->user_id = 2;
+            $metric_access->is_active = $data['adImpressionsIsActive'];
+            $metric_access->save();
+        }
+
         $metric = Metric::query()->updateOrCreate(['name' => 'clicks', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
             ['value' => $data['clicks']]);
 
@@ -33,64 +48,18 @@ class Campaign extends Model
             $metric_access->save();
         }
 
-        $metric = Metric::query()->updateOrCreate(['name' => 'total_reach', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
-            ['value' => $data['totalReach']]);
+        $metric = Metric::query()->updateOrCreate(['name' => 'besucher', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+            ['value' => $data['besucher']]);
 
-        $metric_access = MetricAccess::where('metric_name', 'total_reach')->where('user_id', 2)->first();
+        $metric_access = MetricAccess::where('metric_name', 'besucher')->where('user_id', 2)->first();
         if ($metric_access) {
-            $metric_access->is_active = $data['totalReachIsActive'];
+            $metric_access->is_active = $data['besucherIsActive'];
             $metric_access->save();
         } else {
             $metric_access = new MetricAccess();
-            $metric_access->metric_name = 'total_reach';
+            $metric_access->metric_name = 'besucher';
             $metric_access->user_id = 2;
-            $metric_access->is_active = $data['totalReachIsActive'];
-            $metric_access->save();
-        }
-
-        $metric = Metric::query()->updateOrCreate(['name' => 'ad_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
-            ['value' => $data['adEngagement']]);
-
-        $metric_access = MetricAccess::where('metric_name', 'ad_engagement')->where('user_id', 2)->first();
-        if ($metric_access) {
-            $metric_access->is_active = $data['adEngagementIsActive'];
-            $metric_access->save();
-        } else {
-            $metric_access = new MetricAccess();
-            $metric_access->metric_name = 'ad_engagement';
-            $metric_access->user_id = 2;
-            $metric_access->is_active = $data['adEngagementIsActive'];
-            $metric_access->save();
-        }
-
-        $metric = Metric::query()->updateOrCreate(['name' => 'page_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
-            ['value' => $data['pageEngagement']]);
-
-        $metric_access = MetricAccess::where('metric_name', 'page_engagement')->where('user_id', 2)->first();
-        if ($metric_access) {
-            $metric_access->is_active = $data['pageEngagementIsActive'];
-            $metric_access->save();
-        } else {
-            $metric_access = new MetricAccess();
-            $metric_access->metric_name = 'page_engagement';
-            $metric_access->user_id = 2;
-            $metric_access->is_active = $data['pageEngagementIsActive'];
-            $metric_access->save();
-        }
-
-        $metric = Metric::query()->updateOrCreate(['name' => 'active_length', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
-            ['value' => $data['activeLength']]);
-
-
-        $metric_access = MetricAccess::where('metric_name', 'active_length')->where('user_id', 2)->first();
-        if ($metric_access) {
-            $metric_access->is_active = $data['activeLengthIsActive'];
-            $metric_access->save();
-        } else {
-            $metric_access = new MetricAccess();
-            $metric_access->metric_name = 'active_length';
-            $metric_access->user_id = 2;
-            $metric_access->is_active = $data['activeLengthIsActive'];
+            $metric_access->is_active = $data['besucherIsActive'];
             $metric_access->save();
         }
 
@@ -108,21 +77,157 @@ class Campaign extends Model
             $metric_access->is_active = $data['clickoutsIsActive'];
             $metric_access->save();
         }
-        $metric = Metric::query()->updateOrCreate(['name' => 'sales', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
-            ['value' => $data['sales']]);
+        $metric = Metric::query()->updateOrCreate(['name' => 'benutzer', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+            ['value' => $data['benutzer']]);
 
-
-        $metric_access = MetricAccess::where('metric_name', 'sales')->where('user_id', 2)->first();
+        $metric_access = MetricAccess::where('metric_name', 'benutzer')->where('user_id', 2)->first();
         if ($metric_access) {
-            $metric_access->is_active = $data['salesIsActive'];
+            $metric_access->is_active = $data['benutzerIsActive'];
             $metric_access->save();
         } else {
             $metric_access = new MetricAccess();
-            $metric_access->metric_name = 'sales';
+            $metric_access->metric_name = 'benutzer';
             $metric_access->user_id = 2;
-            $metric_access->is_active = $data['salesIsActive'];
+            $metric_access->is_active = $data['benutzerIsActive'];
             $metric_access->save();
         }
+
+        $metric = Metric::query()->updateOrCreate(['name' => 'sekunden', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+            ['value' => $data['sekunden']]);
+
+        $metric_access = MetricAccess::where('metric_name', 'sekunden')->where('user_id', 2)->first();
+        if ($metric_access) {
+            $metric_access->is_active = $data['sekundenIsActive'];
+            $metric_access->save();
+        } else {
+            $metric_access = new MetricAccess();
+            $metric_access->metric_name = 'sekunden';
+            $metric_access->user_id = 2;
+            $metric_access->is_active = $data['sekundenIsActive'];
+            $metric_access->save();
+        }
+
+        $metric = Metric::query()->updateOrCreate(['name' => 'postClickSales', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+            ['value' => $data['postClickSales']]);
+
+
+        $metric_access = MetricAccess::where('metric_name', 'postClickSales')->where('user_id', 2)->first();
+        if ($metric_access) {
+            $metric_access->is_active = $data['postClickSalesIsActive'];
+            $metric_access->save();
+        } else {
+            $metric_access = new MetricAccess();
+            $metric_access->metric_name = 'postClickSales';
+            $metric_access->user_id = 2;
+            $metric_access->is_active = $data['postClickSalesIsActive'];
+            $metric_access->save();
+        }
+
+//        $metric = Metric::query()->updateOrCreate(['name' => 'clicks', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['clicks']]);
+//
+//        $metric_access = MetricAccess::where('metric_name', 'clicks')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['clicksIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'clicks';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['clicksIsActive'];
+//            $metric_access->save();
+//        }
+//
+//        $metric = Metric::query()->updateOrCreate(['name' => 'total_reach', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['totalReach']]);
+//
+//        $metric_access = MetricAccess::where('metric_name', 'total_reach')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['totalReachIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'total_reach';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['totalReachIsActive'];
+//            $metric_access->save();
+//        }
+//
+//        $metric = Metric::query()->updateOrCreate(['name' => 'ad_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['adEngagement']]);
+//
+//        $metric_access = MetricAccess::where('metric_name', 'ad_engagement')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['adEngagementIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'ad_engagement';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['adEngagementIsActive'];
+//            $metric_access->save();
+//        }
+//
+//        $metric = Metric::query()->updateOrCreate(['name' => 'page_engagement', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['pageEngagement']]);
+//
+//        $metric_access = MetricAccess::where('metric_name', 'page_engagement')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['pageEngagementIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'page_engagement';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['pageEngagementIsActive'];
+//            $metric_access->save();
+//        }
+//
+//        $metric = Metric::query()->updateOrCreate(['name' => 'active_length', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['activeLength']]);
+//
+//
+//        $metric_access = MetricAccess::where('metric_name', 'active_length')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['activeLengthIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'active_length';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['activeLengthIsActive'];
+//            $metric_access->save();
+//        }
+//
+//        $metric = Metric::query()->updateOrCreate(['name' => 'clickouts', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['clickouts']]);
+//
+//        $metric_access = MetricAccess::where('metric_name', 'clickouts')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['clickoutsIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'clickouts';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['clickoutsIsActive'];
+//            $metric_access->save();
+//        }
+//        $metric = Metric::query()->updateOrCreate(['name' => 'sales', 'date' => $data['date'], 'campaign_id' => $id, 'engagement' => $data['engagement']],
+//            ['value' => $data['sales']]);
+//
+//
+//        $metric_access = MetricAccess::where('metric_name', 'sales')->where('user_id', 2)->first();
+//        if ($metric_access) {
+//            $metric_access->is_active = $data['salesIsActive'];
+//            $metric_access->save();
+//        } else {
+//            $metric_access = new MetricAccess();
+//            $metric_access->metric_name = 'sales';
+//            $metric_access->user_id = 2;
+//            $metric_access->is_active = $data['salesIsActive'];
+//            $metric_access->save();
+//        }
 
         return response()->json(['message' => __('Data saved successfully.')]);
     }
@@ -156,10 +261,15 @@ class Campaign extends Model
         $to = $data['date_to'];
         $engagement = $data['selected'];
 
+//        $fields_arr = [
+//            'clicks', 'total_reach',
+//            'ad_engagement', 'page_engagement',
+//            'active_length', 'clickouts', 'sales'
+//        ];
         $fields_arr = [
-            'clicks', 'total_reach',
-            'ad_engagement', 'page_engagement',
-            'active_length', 'clickouts', 'sales'
+            'adImpressions', 'clicks',
+            'besucher', 'clickouts',
+            'benutzer', 'sekunden', 'postClickSales'
         ];
         foreach ($fields_arr as $field) {
             $access = MetricAccess::where('metric_name', $field)->where('user_id', 2)->first();
