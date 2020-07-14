@@ -54,6 +54,7 @@ Route::get('get/company/{id}', 'Api\V1\AdminController@getCompany');
 
 Route::post('groups/edit/{id}', 'Api\V1\AdminController@editGroup');
 Route::get('get/groups/', 'Api\V1\AdminController@getGroups');
+Route::get('get/groups/filter', 'Api\V1\AdminController@getGroupFilter');
 Route::post('group/create', 'Api\V1\AdminController@storeGroup');
 Route::get('get/group/{id}', 'Api\V1\AdminController@getGroup');
 
