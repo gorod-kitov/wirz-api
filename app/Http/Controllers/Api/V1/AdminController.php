@@ -43,7 +43,13 @@ class AdminController extends Controller
 
     public function storeCompany(Request $request)
     {
-        $company = Campaign::find($request->company_id);
+        if($request->company_id) {
+            $company = Campaign::find($request->company_id);
+        } else {
+            $company = new Campaign();
+            $company->is_active = 1;
+        }
+
         $company->name = $request->campaign_name;
         $company->user_id = $request->selected_user;
         $company->description = $request->description;
