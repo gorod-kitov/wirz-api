@@ -162,7 +162,7 @@ class AdminController extends Controller
             $companies = Group::with('users.campaigns')->get();
         } else {
             $companies = Group::whereHas('users', function ($user) {
-                $user->where('role_id',1);
+                $user->where('id',auth()->user()->id);
             })->with(['users' => function($user) {
                 $user->with('campaigns');
             }])->get();
