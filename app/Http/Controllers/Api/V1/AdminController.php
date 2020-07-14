@@ -159,7 +159,11 @@ class AdminController extends Controller
         $companies = null;
 
         if (auth()->user()->role_id == 1) {
-            $companies = Group::with('users.campaigns')->get();
+            $companies = Group::whereHas('users', function ($user) {
+                $user->where('role_id','!=',1);
+            })->with(['users' =>  function ($user) {
+                $user->where('role_id','!=',1)->with('campaigns');
+            }])->get();
         } else {
             $companies = Group::whereHas('users', function ($user) {
                 $user->where('id',auth()->user()->id);
