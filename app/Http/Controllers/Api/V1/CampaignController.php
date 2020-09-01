@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\models\Engagements;
+use App\Models\Engagements;
 use App\Models\MetricAccess;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
