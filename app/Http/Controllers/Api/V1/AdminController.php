@@ -31,19 +31,19 @@ class AdminController extends Controller
         $data = array_merge($create, $ifFilled);
 
         if (!$request->update) {
-          $user =  User::create($data);
+            $user = User::create($data);
         } else {
-          $user =  User::where('id', $request->id)->first();
-          $user->update($data);
+            $user = User::where('id', $request->id)->first();
+            $user->update($data);
         }
 
-        return response()->json(['status' => 'ok', 'user' => $user->load('group','role')], Response::HTTP_OK);
+        return response()->json(['status' => 'ok', 'user' => $user->load('group', 'role')], Response::HTTP_OK);
     }
 
 
     public function storeCompany(Request $request)
     {
-        if($request->company_id) {
+        if ($request->company_id) {
             $company = Campaign::find($request->company_id);
         } else {
             $company = new Campaign();
@@ -72,7 +72,7 @@ class AdminController extends Controller
     public function getUser($id)
     {
         $user = User::where('id', $id)
-            ->select('name', 'email', 'role_id','group_id')
+            ->select('name', 'email', 'role_id', 'group_id')
             ->get()->toArray();
 
         return response()->json($user, Response::HTTP_OK);
@@ -88,13 +88,13 @@ class AdminController extends Controller
     public function getGroup($id)
     {
         $user = Group::where('id', $id)
-            ->select('id', 'name' )
+            ->select('id', 'name')
             ->first()->toArray();
 
         return response()->json($user, Response::HTTP_OK);
     }
 
-    public function storeGroup (Request $request)
+    public function storeGroup(Request $request)
     {
 
         $logo = null;
@@ -119,7 +119,7 @@ class AdminController extends Controller
 
     }
 
-    public function editGroup ($id, Request $request)
+    public function editGroup($id, Request $request)
     {
         $logo = null;
         $update = [
@@ -134,7 +134,7 @@ class AdminController extends Controller
         $group = Group::query()->findOrFail($id);
         $group->update($update);
 
-        return \response()->json($group,Response::HTTP_OK);
+        return \response()->json($group, Response::HTTP_OK);
 
     }
 
@@ -160,14 +160,14 @@ class AdminController extends Controller
 
         if (auth()->user()->role_id == 1) {
             $companies = Group::whereHas('users', function ($user) {
-                $user->where('role_id','!=',1);
-            })->with(['users' =>  function ($user) {
-                $user->where('role_id','!=',1)->with('campaigns');
+                $user->where('role_id', '!=', 1);
+            })->with(['users' => function ($user) {
+                $user->where('role_id', '!=', 1)->with('campaigns');
             }])->get();
         } else {
             $companies = Group::whereHas('users', function ($user) {
-                $user->where('id',auth()->user()->id);
-            })->with(['users' => function($user) {
+                $user->where('id', auth()->user()->id);
+            })->with(['users' => function ($user) {
                 $user->with('campaigns');
             }])->get();
         }
@@ -178,6 +178,60 @@ class AdminController extends Controller
     public function getCompany($id)
     {
         return Campaign::find($id)->toArray();
+    }
+
+
+    public function toggleShow(Request $request)
+    {
+        // This will work if all clients should be hidden,
+        // If we need to hide certain campaign from user (client in our case), then we need to change this, or put in loop
+        $hiddenFromArray = [];
+
+        $hiddenFromString = Campaign::select('hidden_from')->first()->hidden_from;
+        $hiddenFromArray = explode(',', $hiddenFromString);
+
+        // delete default null value
+        $hiddenFromArray = array_filter($hiddenFromArray);
+
+
+
+        if ($request->value == false) {
+            $hiddenFromArray = $this->deleteFromArray($request->id, $hiddenFromArray);
+        } else {
+            $hiddenFromArray[] = $request->id;
+        }
+
+        // delete duplicates
+        $hiddenFromArray = array_unique($hiddenFromArray);
+
+      // return response()->json($hiddenFromArray, Response::HTTP_OK);
+
+
+//        if(!empty($hiddenFromArray))
+//        {
+            $hiddenFromString = implode(',', $hiddenFromArray);
+//        }
+
+        Campaign::where('id','>',0)->update(['hidden_from' => $hiddenFromString]);
+
+        return response()->json('ok', Response::HTTP_OK);
+
+    }
+
+    private function deleteFromArray($id, $array)
+    {
+        if (($key = array_search($id, $array)) !== false) {
+            unset($array[$key]);
+        }
+
+       // return $array;
+
+        if(empty($array))
+        {
+            return [];
+        }
+
+        return $array;
     }
 
 }

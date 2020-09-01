@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\models\Engagements;
+use App\Models\MetricAccess;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Metric;
 use App\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
@@ -27,22 +30,25 @@ class CampaignController extends Controller
 
     public function filterMetrics1(Request $request)
     {
-        //$this->check();
-
-        $metrics = Metric::query()->select('name', 'value', 'metric_accesses.is_active')->where('campaign_id', $request->campaign)
-            ->where('date', $request->date)
+        $metrics = MetricAccess::query()->where('campaign_id', $request->campaign)
+            ->whereDate('date', Carbon::parse($request->date)->format('Y-m-d'))
             ->where('engagement', $request->selected)
-            ->join('metric_accesses', 'metrics.name', 'metric_accesses.metric_name')
+            ->where('campaign_id', $request->campaign)
             ->get();
 
         return response()->json($metrics->toArray());
     }
 
+    public function engagements($id)
+    {
+        $data = Campaign::find($id)->load('engagements');
+        return \response()->json($data);
+    }
     public function filterMetrics2(Request $request)
     {
         $authUser = auth()->user();
 
-        $companies = Campaign::query()->select('id', 'name', 'is_active')
+        $companies = Campaign::query()->select('id', 'name', 'is_active','hidden_from')
             ->with(['metrics2' => function ($query) use ($request) {
                 $query->where('date', $request->date)
                     ->select('name', 'value', 'campaign_id');
@@ -62,16 +68,23 @@ class CampaignController extends Controller
 
     public function addMetrics1(Request $request)
     {
-
         $campaign = $this->campaigns
             ->where('name', $request->get('campaign'))
             ->first();
 
         if ($campaign) {
-            return $this->campaigns->addMetrics1($campaign->id, $request->all());
+            return $this->campaigns->addMetrics1($campaign, $request->all());
         } else {
             return response()->json(['message' => __('Campaing not found.'), 404]);
         }
+    }
+
+
+    public function getEngagements($campaignId)
+    {
+         $engagements =  Engagements::where('campaign_id', $campaignId)->get()->toArray();
+
+         return response()->json($engagements, Response::HTTP_OK);
     }
 
     public function addMetrics2(Request $request)
@@ -82,12 +95,11 @@ class CampaignController extends Controller
 
     public function getMetrics1($id, Request $request)
     {
-//	    return response()->json($request->all());
         $request->validate([
             'date_from' => 'required|string',
             'date_to' => 'required|string',
         ]);
-//		return response()->json($id);
+
         $campaign = $this->campaigns
             ->where('id', $id)
             ->first();
@@ -115,6 +127,15 @@ class CampaignController extends Controller
         } else {
             return response()->json(['message' => __('Campaing not found.'), 404]);
         }
+    }
+
+    public function deleteMetrics($id)
+    {
+        $response = MetricAccess::query()
+            ->where('id',$id)
+            ->delete();
+
+        return response()->json($response);
     }
 
     private function check()
@@ -155,5 +176,33 @@ class CampaignController extends Controller
 
         exit('done');
     }
+
+
+    public function addEngagament(Request $request)
+    {
+       $created =  Engagements::create($request->all());
+
+        return response()->json($created, Response::HTTP_OK);
+    }
+
+    public function deleteEngagament(Request $request)
+    {
+        Engagements::find($request->id)->delete();
+
+        return response()->json('deleted', Response::HTTP_OK);
+    }
+
+    public function updateEngagament(Request $request)
+    {
+        $engagenment = Engagements::where('id',$request->id)->update(['name'=>$request->name]);
+
+        return response()->json('updated', Response::HTTP_OK);
+    }
+
+    public function metrics1Excel( $id, Request $request)
+    {
+
+    }
+
 
 }
