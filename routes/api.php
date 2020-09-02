@@ -27,7 +27,6 @@ Route::get('campaign/get-engagements/{campaign_id}', 'Api\V1\CampaignController@
 Route::get('campaign/filter/metrics2', 'Api\V1\CampaignController@filterMetrics2');
 Route::post('/campaign/metrics2', 'Api\V1\CampaignController@addMetrics2');
 Route::get('/campaign/{id}/metrics1', 'Api\V1\CampaignController@getMetrics1');
-Route::get('/campaign/{id?}/metrics1/excel', 'Api\V1\CampaignController@metrics1Excel');
 Route::get('/campaign/{id}/metrics2', 'Api\V1\CampaignController@getMetrics2');
 Route::delete('/campaign/{id}/metrics', 'Api\V1\CampaignController@deleteMetrics');
 
@@ -64,6 +63,7 @@ Route::get('get/company/{id}', 'Api\V1\AdminController@getCompany');
 
 Route::post('client/toggle-show', 'Api\V1\AdminController@toggleShow');
 
+Route::get('download-csv', 'Api\V1\AdminController@downloadCSV');
 
 
 Route::post('groups/edit/{id}', 'Api\V1\AdminController@editGroup');

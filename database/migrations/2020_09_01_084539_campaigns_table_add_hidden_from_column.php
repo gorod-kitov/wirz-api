@@ -14,7 +14,7 @@ class CampaignsTableAddHiddenFromColumn extends Migration
     public function up()
     {
         Schema::table('campaigns', function (Blueprint $table) {
-            $table->string('hidden_from')->after('description')->nullable();
+            $table->string('hidden_from')->after('description')->default('');
         });
     }
 

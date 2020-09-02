@@ -6,6 +6,7 @@ use App\Group;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -233,5 +234,17 @@ class AdminController extends Controller
 
         return $array;
     }
+
+    public function downloadCSV(Request $request)
+    {
+        $date = $request->from.'-'.$request->to;
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\MetricsExport($request), "data-{$date}.csv",
+            \Maatwebsite\Excel\Excel::CSV
+        );
+
+    }
+
 
 }

@@ -199,10 +199,4 @@ class CampaignController extends Controller
         return response()->json('updated', Response::HTTP_OK);
     }
 
-    public function metrics1Excel( $id, Request $request)
-    {
-
-    }
-
-
 }
