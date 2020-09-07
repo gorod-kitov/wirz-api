@@ -20,6 +20,10 @@ class User extends Authenticatable implements JWTSubject
         'name', 'email', 'logo', 'role_id', 'password','group_id'
     ];
 
+    protected $appends = [
+        'image'
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -85,5 +89,10 @@ class User extends Authenticatable implements JWTSubject
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function getImageAttribute()
+    {
+        return $this->logo ? asset('images/users/logo/' . $this->logo) : null;
     }
 }

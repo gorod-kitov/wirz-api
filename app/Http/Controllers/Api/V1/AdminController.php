@@ -7,14 +7,25 @@ use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\User;
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 
 class AdminController extends Controller
 {
 
     public function store(Request $request)
     {
+        $logo = null;
+
+        if ($request->file('logo')) {
+
+            $logo = time() . uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
+
+            $request->file('logo')->move(public_path('images/users/logo'), $logo);
+
+        }
 
         // password and logo may not be not provided during edit
         $ifFilled = [];
@@ -26,7 +37,8 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role_id' => $request->is_admin == 'true' ? 1 : 2,
-            'group_id' => $request->group_id
+            'group_id' => $request->group_id,
+            'logo' => $logo
         ];
 
         $data = array_merge($create, $ifFilled);
@@ -35,6 +47,7 @@ class AdminController extends Controller
             $user = User::create($data);
         } else {
             $user = User::where('id', $request->id)->first();
+            File::delete('images/users/logo/'.$user->logo);
             $user->update($data);
         }
 
@@ -83,6 +96,7 @@ class AdminController extends Controller
     public function getGroups(Request $request)
     {
         $group = Group::get();
+//        dd($group);
         return \response()->json($group);
     }
 
